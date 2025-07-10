@@ -10,7 +10,10 @@
 //! a ^= 0x5555555.into();
 //! ```
 
-use core::ops::{BitAnd, BitAndAssign, BitOr, BitOrAssign, BitXor, BitXorAssign, Not};
+use core::{
+    marker::PhantomData,
+    ops::{BitAnd, BitAndAssign, BitOr, BitOrAssign, BitXor, BitXorAssign, Not},
+};
 
 use super::*;
 
@@ -21,7 +24,7 @@ macro_rules! add_bitwise_ops {
         impl BitAnd for $wrap_ty {
             type Output = Self;
             fn bitand(self, rhs: Self) -> Self::Output {
-                Self(self.0 & rhs.0)
+                Self(self.0 & rhs.0, PhantomData)
             }
         }
         impl BitAndAssign for $wrap_ty {
@@ -34,7 +37,7 @@ macro_rules! add_bitwise_ops {
             type Output = Self;
 
             fn bitxor(self, rhs: Self) -> Self::Output {
-                Self(self.0 ^ rhs.0)
+                Self(self.0 ^ rhs.0, PhantomData)
             }
         }
         impl BitXorAssign for $wrap_ty {
@@ -46,7 +49,7 @@ macro_rules! add_bitwise_ops {
             type Output = Self;
 
             fn bitor(self, rhs: Self) -> Self {
-                Self(self.0 | rhs.0)
+                Self(self.0 | rhs.0, PhantomData)
             }
         }
         impl BitOrAssign for $wrap_ty {
@@ -58,7 +61,7 @@ macro_rules! add_bitwise_ops {
             type Output = Self;
 
             fn not(self) -> Self::Output {
-                Self(!self.0)
+                Self(!self.0, PhantomData)
             }
         }
     };

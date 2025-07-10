@@ -4,9 +4,10 @@ use core::ops::Neg;
 
 macro_rules! add_neg_ops {
     ($wrap_ty:ident) => {
-        impl<T> Neg for $wrap_ty<T>
+        impl<V, B> Neg for $wrap_ty<V, B>
         where
-            T: Neg<Output = T> + SpecificEndian<T>,
+            V: Neg<Output = V> + SpecificEndian<B>,
+            B: Copy,
         {
             type Output = Self;
 
@@ -32,7 +33,7 @@ mod tests {
     }
     #[test]
     fn negate_fp() {
-        let be1 = BigEndian::from(1.0);
+        let be1 = BigEndian::<f64, u64>::from(1.0);
         let be2 = -be1;
         println!("{}, {}", be1, be2);
         assert_eq!(be2, f64be::from(-1.0));

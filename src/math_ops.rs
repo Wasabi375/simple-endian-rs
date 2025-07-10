@@ -7,10 +7,11 @@ use super::*;
 
 #[allow(unused_macros)]
 macro_rules! add_math_ops {
-    ($wrap_ty:ident) => {
-        impl<T> Add for $wrap_ty<T>
+    ($value_ty:ident) => {
+        impl<V, B> Add for $value_ty<V, B>
         where
-            T: Add<Output = T> + SpecificEndian<T>,
+            V: Add<Output = V> + SpecificEndian<B>,
+            B: Copy,
         {
             type Output = Self;
 
@@ -19,18 +20,20 @@ macro_rules! add_math_ops {
             }
         }
 
-        impl<T> AddAssign for $wrap_ty<T>
+        impl<V, B> AddAssign for $value_ty<V, B>
         where
-            T: Add<Output = T> + SpecificEndian<T>,
+            V: Add<Output = V> + SpecificEndian<B>,
+            B: Copy,
         {
             fn add_assign(&mut self, other: Self) {
                 *self = *self + other;
             }
         }
 
-        impl<T> Mul for $wrap_ty<T>
+        impl<V, B> Mul for $value_ty<V, B>
         where
-            T: Mul<Output = T> + SpecificEndian<T>,
+            V: Mul<Output = V> + SpecificEndian<B>,
+            B: Copy,
         {
             type Output = Self;
 
@@ -39,18 +42,20 @@ macro_rules! add_math_ops {
             }
         }
 
-        impl<T> MulAssign for $wrap_ty<T>
+        impl<V, B> MulAssign for $value_ty<V, B>
         where
-            T: Mul<Output = T> + SpecificEndian<T>,
+            V: Mul<Output = V> + SpecificEndian<B>,
+            B: Copy,
         {
             fn mul_assign(&mut self, other: Self) {
                 *self = *self * other;
             }
         }
 
-        impl<T> Div for $wrap_ty<T>
+        impl<V, B> Div for $value_ty<V, B>
         where
-            T: Div<Output = T> + SpecificEndian<T>,
+            V: Div<Output = V> + SpecificEndian<B>,
+            B: Copy,
         {
             type Output = Self;
 
@@ -59,18 +64,20 @@ macro_rules! add_math_ops {
             }
         }
 
-        impl<T> DivAssign for $wrap_ty<T>
+        impl<V, B> DivAssign for $value_ty<V, B>
         where
-            T: Div<Output = T> + SpecificEndian<T>,
+            V: Div<Output = V> + SpecificEndian<B>,
+            B: Copy,
         {
             fn div_assign(&mut self, other: Self) {
                 *self = *self / other;
             }
         }
 
-        impl<T> Sub for $wrap_ty<T>
+        impl<V, B> Sub for $value_ty<V, B>
         where
-            T: Sub<Output = T> + SpecificEndian<T>,
+            V: Sub<Output = V> + SpecificEndian<B>,
+            B: Copy,
         {
             type Output = Self;
 
@@ -79,9 +86,10 @@ macro_rules! add_math_ops {
             }
         }
 
-        impl<T> SubAssign for $wrap_ty<T>
+        impl<V, B> SubAssign for $value_ty<V, B>
         where
-            T: Sub<Output = T> + SpecificEndian<T>,
+            V: Sub<Output = V> + SpecificEndian<B>,
+            B: Copy,
         {
             fn sub_assign(&mut self, other: Self) {
                 *self = *self - other;

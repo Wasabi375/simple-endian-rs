@@ -5,38 +5,42 @@ use core::cmp::Ordering;
 #[allow(unused_imports)]
 use super::*;
 
-impl<T> PartialOrd for BigEndian<T>
+impl<V, B> PartialOrd for BigEndian<V, B>
 where
-    T: PartialOrd + SpecificEndian<T>,
+    V: SpecificEndian<B> + PartialOrd,
+    B: Copy,
 {
-    fn partial_cmp(&self, other: &BigEndian<T>) -> Option<Ordering> {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
         self.to_native().partial_cmp(&other.to_native())
     }
 }
 
-impl<T> PartialOrd for LittleEndian<T>
+impl<V, B> PartialOrd for LittleEndian<V, B>
 where
-    T: PartialOrd + SpecificEndian<T>,
+    V: SpecificEndian<B> + PartialOrd,
+    B: Copy,
 {
-    fn partial_cmp(&self, other: &LittleEndian<T>) -> Option<Ordering> {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
         self.to_native().partial_cmp(&other.to_native())
     }
 }
 
-impl<T> Ord for BigEndian<T>
+impl<V, B> Ord for BigEndian<V, B>
 where
-    T: Ord + SpecificEndian<T>,
+    V: SpecificEndian<B> + Ord,
+    B: Copy,
 {
-    fn cmp(&self, other: &BigEndian<T>) -> Ordering {
+    fn cmp(&self, other: &Self) -> Ordering {
         self.to_native().cmp(&other.to_native())
     }
 }
 
-impl<T> Ord for LittleEndian<T>
+impl<V, B> Ord for LittleEndian<V, B>
 where
-    T: Ord + SpecificEndian<T>,
+    V: SpecificEndian<B> + Ord,
+    B: Copy,
 {
-    fn cmp(&self, other: &LittleEndian<T>) -> Ordering {
+    fn cmp(&self, other: &Self) -> Ordering {
         self.to_native().cmp(&other.to_native())
     }
 }
@@ -75,8 +79,8 @@ mod tests {
 
     #[test]
     fn lt_fp_be() {
-        let be1 = BigEndian::from(1234.5678);
-        let be2 = BigEndian::from(6234.5678);
+        let be1 = BigEndian::<f64, u64>::from(1234.5678);
+        let be2 = BigEndian::<f64, u64>::from(6234.5678);
         assert!(be1 < be2);
     }
 }
