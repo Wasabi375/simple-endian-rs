@@ -20,7 +20,7 @@ benchmark_main!(benches);
 //criterion_group!(benches, bench_integer_be);
 //criterion_main!(benches);
 
-use simple_endian::{BigEndian, LittleEndian};
+use simple_endian_wrapper::{BigEndian, LittleEndian};
 
 fn bench_integer_be(b: &mut Bencher) {
     b.iter(|| {

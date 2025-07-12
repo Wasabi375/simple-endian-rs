@@ -2,7 +2,7 @@
 //!
 //! ```rust
 //! // These should all be basically zero-cost:
-//! use simple_endian::*;
+//! use simple_endian_wrapper::*;
 //! let mut a = BigEndian::from(0xf8dc);
 //! let mask = BigEndian::from(0xf0f0f);
 //! a &= mask;

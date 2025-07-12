@@ -1,14 +1,13 @@
 [package]
-name = "simple_endian"
-version = "0.3.2"
-authors = ["Erica Stith <rexlunae@gmail.com>"]
+name = "simple_endian_wrapper"
+version = "0.1.0"
+authors = ["Burkhard Mittelbach <burkhard@mittelbach-online.de>"]
 edition = "2021"
 license = "MIT"
 description = "A create for defining endianness within your data structures, to make handling portable data structures simpler."
-repository = "https://github.com/rexlunae/simple-endian-rs"
+repository = "https://github.com/Wasabi375/simple-endian-rs"
 keywords = ["endian", "byteorder", "big-endian", "little-endian", "data-structures"]
-documentation = "https://docs.rs/simple_endian/"
-homepage = "https://github.com/rexlunae/simple-endian-rs"
+documentation = "https://docs.rs/simple_endian_wrapper/"
 readme = "README.md"
 
 [[bench]]

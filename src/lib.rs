@@ -8,7 +8,7 @@ simply using the standard From and Into trait methods (from() and into()).  No e
 # Example 1:
 
 ```rust
-use simple_endian::*;
+use simple_endian_wrapper::*;
 
 fn init() {
     #[repr(C)]
@@ -31,7 +31,7 @@ Trying to write `bp.a = new_a;` causes an error because the type u64 can't be di
 Of course, just storing things in memory isn't that useful unless you write somewhere.
 
 ```rust
-use simple_endian::*;
+use simple_endian_wrapper::*;
 use std::fs::File;
 use std::io::prelude::*;
 use std::mem::{transmute, size_of};
@@ -72,7 +72,7 @@ use std::{
 };
 
 use memmap::MmapOptions;
-use simple_endian::*;
+use simple_endian_wrapper::*;
 
 #[repr(C)]
 struct MyBEStruct {

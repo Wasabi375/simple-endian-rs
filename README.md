@@ -37,7 +37,7 @@ The goals of this crate are as follows:
 ## Examples
 
 ```rust
-use simple_endian::*;
+use simple_endian_wrapper::*;
 
 let foo: u64be = 4.into();    //Stores 4 in foo in big endian.
 
@@ -49,7 +49,7 @@ The output will depend on what sort of computer you're using.  If you're running
 This works in reverse as well:
 
 ```rust
-use simple_endian::*;
+use simple_endian_wrapper::*;
 
 let foo: u64be = 4.into();
 let bar = u64::from(foo);
@@ -60,7 +60,7 @@ println!("value: {:x}", bar);
 If you prefer, there's a convenience method so that you don't need to explicitly convert back to the basic native type.
 
 ```rust
-use simple_endian::*;
+use simple_endian_wrapper::*;
 
 let foo: u64be = 4.into();
 let bar = foo.to_native();
@@ -90,7 +90,7 @@ At the time of this writing, the only common built-in type that doesn't have an 
 This crate also provides implementations of a variety of useful traits for the types that it wraps, including boolean logic implementations for the integer types, including bools.  This allows most boolean logic operations to be performed without any endian conversions using ordinary operators.  You are required to use same-endian operands, however, like this:
 
 ```rust
-use simple_endian::*;
+use simple_endian_wrapper::*;
 
 let ip: BigEndian::<u32> = 0x0a00000a.into();
 let subnet_mask = BigEndian::from(0xff000000u32);
@@ -100,12 +100,15 @@ let network = ip & subnet_mask;
 println!("value: {:x}", network);
 ```
 
-As you see, the network is calculated by masking the IP address with the subnet mask in a way that the programmer barely has to think about the conversion operations.
+As you see, the network is calculated by masking the IP address with the subnet
+mask in a way that the programmer barely has to think about the conversion
+operations.
 
-Alternatively, you might want to define a structure with the elements typed so that it can be moved around as a unit.
+Alternatively, you might want to define a structure with the elements typed so
+that it can be moved around as a unit.
 
 ```rust
-use simple_endian::*;
+use simple_endian_wrapper::*;
 
 #[derive(Debug)]
 #[repr(C)]
@@ -122,30 +125,71 @@ println!("value: {:x?}", config);
 
 Note that the println! will convert the values to native endian.
 
-And finally, this crate implements a number of traits that allow most of the basic arithmetic operators to be used on the Big- and LittleEndian variants of all of the types, where appropriate, including for the floats.  There is a certain amount of overhead to this, since each operation requires at least one and often two or more endian conversions, however, since this crate aims to minimize the cost of writing portable code, they are provided to reduce friction to adoption.  If you are writing code that is extremely sensitive to such overhead, it might make sense to convert to native endian, do your operations, and then store back in the specified endian using `.into()` or similar.  That said, the overhead is often very small, and Rust's optimizer is very good, so I would encourage you to do some actual benchmarking before taking an unergonomic approach to your code.  There are too many traits implemented to list them here, so I recommend consulting [the documentation](https://docs.rs/simple_endian/).  Alternatively, you could just try what you want to do, and see if it compiles.  It shouldn't ever allow you to compile something that doesn't handle endianness correctly unless you work pretty hard at it.
+And finally, this crate implements a number of traits that allow most of the
+basic arithmetic operators to be used on the Big- and LittleEndian variants of
+all of the types, where appropriate, including for the floats.  There is a
+certain amount of overhead to this, since each operation requires at least one
+and often two or more endian conversions, however, since this crate aims to
+minimize the cost of writing portable code, they are provided to reduce
+friction to adoption.  If you are writing code that is extremely sensitive to
+such overhead, it might make sense to convert to native endian, do your
+operations, and then store back in the specified endian using `.into()` or
+similar.  That said, the overhead is often very small, and Rust's optimizer is
+very good, so I would encourage you to do some actual benchmarking before
+taking an unergonomic approach to your code.  There are too many traits
+implemented to list them here, so I recommend consulting [the
+documentation](https://docs.rs/simple_endian_wrapper/).  Alternatively, you
+could just try what you want to do, and see if it compiles.  It shouldn't ever
+allow you to compile something that doesn't handle endianness correctly unless
+you work pretty hard at it.
 
 ### Representations and ABI
 
-You might notice that we used `#[repr(C)]` in the data struct above, and you might be wondering why. It is often the case that you want to write a `struct` that has a very specific layout when you are writing structures that will be directly read from and written to some medium. Rust's default ABI does not guarantee this. For that reason, all of the structs defined in this crate are `#[repr(transparent)]`, and it is strongly recommended if you do plan to directly write these structures to disk or the network, that you do something to ensure a consistent layout similar or otherwise guarantee the order in which the fields are stored.
+You might notice that we used `#[repr(C)]` in the data struct above, and you
+might be wondering why. It is often the case that you want to write a `struct`
+that has a very specific layout when you are writing structures that will be
+directly read from and written to some medium. Rust's default ABI does not
+guarantee this. For that reason, all of the structs defined in this crate are
+`#[repr(transparent)]`, and it is strongly recommended if you do plan to
+directly write these structures to disk or the network, that you do something
+to ensure a consistent layout similar or otherwise guarantee the order in which
+the fields are stored.
 
 ## Operations on Types
 
-In addition to offering support for ensuring that correct endianness is used by leveraging the Rust type system, this crate also provides implementations of a number of traits from the `core` library that allow you to work with values directly without converting them to native endian types first. In many cases, this is literally a zero-cost capability, because bitwise operations are endian-agnostic, and as long as you are using other `SpecificEndian` types, there is no overhead to doing operations on them directly. In cases where a conversion to native endian is necessary, the crate will perform the conversion, and return a value in the same type as the input.
+In addition to offering support for ensuring that correct endianness is used by
+leveraging the Rust type system, this crate also provides implementations of a
+number of traits from the `core` library that allow you to work with values
+directly without converting them to native endian types first. In many cases,
+this is literally a zero-cost capability, because bitwise operations are
+endian-agnostic, and as long as you are using other `SpecificEndian` types,
+there is no overhead to doing operations on them directly. In cases where a
+conversion to native endian is necessary, the crate will perform the
+conversion, and return a value in the same type as the input.
 
 ## Features
 
-Although this crate includes a lot of useful functionality up front, including it all can increase your compiled size significantly. For size-conscious applications, I recommend not including everything.
+Although this crate includes a lot of useful functionality up front, including
+it all can increase your compiled size significantly. For size-conscious
+applications, I recommend not including everything.
 
-By default, this crate will compile with all supported features. Although this means that in most cases, almost anything you would want to do would work out of the box, in practical terms, this can make the crate rather large. To avoid bloat, it might be best to set `default-features = false` in your "Cargo.toml", and add back in the features you actually need.
+By default, this crate will compile with all supported features. Although this
+means that in most cases, almost anything you would want to do would work out
+of the box, in practical terms, this can make the crate rather large. To avoid
+bloat, it might be best to set `default-features = false` in your "Cargo.toml",
+and add back in the features you actually need.
 
-The two most useful features are probably the ones that control support for big- and little- endians:
+The two most useful features are probably the ones that control support for
+big- and little- endians:
 
 * `big_endian`
 * `little_endian`
 
 Others are broken into categories:
 
-* Operations types - These can make the use of `SpecificEndian<T>` types more ergonimic, and allow for some amount of optimization by avoiding unnecessary convertions to and from native endian.
+* Operations types - These can make the use of `SpecificEndian<T>` types more
+  ergonimic, and allow for some amount of optimization by avoiding unnecessary
+  convertions to and from native endian.
   * `bitwise`
   * `comparisons`
   * `math_ops`
@@ -159,11 +203,19 @@ Others are broken into categories:
 
 ## Performance
 
-For the most part, the performance of the endian operations are extremely fast, even compared to native operations.  The main exception is the std::fmt implementations, which are in some cases quite a bit slower than default.  I'm open to suggestions on how to improve the performance, but it might be worth using .to_native() instead of directly printing the wrapped types in performance-critical contexts.
+For the most part, the performance of the endian operations are extremely fast,
+even compared to native operations.  The main exception is the std::fmt
+implementations, which are in some cases quite a bit slower than default.  I'm
+open to suggestions on how to improve the performance, but it might be worth
+using .to_native() instead of directly printing the wrapped types in
+performance-critical contexts.
 
 ## See Also
 
-This crate allows for the manipulation of specific-endian structures in memory.  It does not provide any facility for reading or writing those structures, which would probably be necessary in most use cases.  See the following other crates for that functionality:
+This crate allows for the manipulation of specific-endian structures in memory.
+It does not provide any facility for reading or writing those structures, which
+would probably be necessary in most use cases.  See the following other crates
+for that functionality:
 
 * Rust's standard std::mem::[transmute](https://doc.rust-lang.org/std/mem/fn.transmute.html) call:
 * [safe-transmute](https://crates.io/crates/safe-transmute)
