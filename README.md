@@ -1,12 +1,23 @@
 # simple-endian
 
-As of the 0.3 release, this library works on stable Rust.
+This library works on stable Rust.
 
 Yet another library for handling endian in Rust.  We use Rust's type system to ensure correct conversions and build data types with explicit endianness defined for more seamless portability of data structures between processor types.  It should be fairly lightweight, and supports `#![no_std]`.
 
 The key difference between this crate and other crates for handling endian is that in this crate, you aren't doing conversions manually at all.  You are just working in the endian that is appropriate to the data structures that you're dealing with, and we try to provide the needed traits and methods to do this in as normal a way as possible.
 
-## Isn't there already a library for this
+## Isn't there already a library for this - This is a fork
+
+Yes, this is a fork of an existing
+[library](https://crates.io/crates/simple_endian). However that crate has not
+been updated in years so I decided to fork it to implement the features that I
+was missing.
+This includes a breaking change in the API for `SpecificEndian` that allows to 
+differentiate between the value type (e.g. `NonMaxU8`) and it's bit representation
+used when the endianness is changed (e.g. `u8`). This is sometime necessary in order 
+to not break [null-pointer-optimization](https://doc.rust-lang.org/stable/std/option/index.html#representation).
+
+## Isn't there already a library for this - Other implementations
 
 Yes, there are several.  But I'm not entirely happy with any of them.  Specifically, most of the libraries out there right now focus on providing functions for doing endian conversions.  Here are a few of them:
 
@@ -218,6 +229,7 @@ would probably be necessary in most use cases.  See the following other crates
 for that functionality:
 
 * Rust's standard std::mem::[transmute](https://doc.rust-lang.org/std/mem/fn.transmute.html) call:
+* [simple-endian-rs](https://crates.io/crates/simple_endian) - The original implementation
 * [safe-transmute](https://crates.io/crates/safe-transmute)
 * [endian-trait](https://crates.io/crates/endian_trait)
 * [byteordered](https://crates.io/crates/byteordered)
