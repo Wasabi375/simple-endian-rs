@@ -35,3 +35,7 @@ float_impls = ["integer_impls"]
 integer_impls = []
 byte_impls = []
 non_zero_impls = ["integer_impls"]
+bytemuck = ["dep:bytemuck"]
+
+[dependencies]
+bytemuck = { version = "1.25", optional = true }

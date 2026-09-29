@@ -108,7 +108,6 @@ fn main() -> Result<(), Error> {
 ```
 
 */
-#[warn(soft_unstable)]
 
 /// The main part of the library.  Contains the trait SpecificEndian<T> and BigEndian<T> and LittleEndian<T> structs, as well as the
 /// implementation of those on the primitive types.
@@ -138,6 +137,9 @@ mod neg_ops;
 /// Formatter impls.
 #[cfg(feature = "format")]
 mod formatting_ops;
+
+#[cfg(feature = "bytemuck")]
+mod bytemuck_impls;
 
 /// The shorthand types (e.g u64be, f32le, etc)
 mod shorthand_types;
